@@ -7,7 +7,7 @@ public class Number {
 
 	public Number() {
 		Random random = new Random();
-		this.number = random.nextInt(10);
+		this.number = random.nextInt(1000);
 		this.win = false;
 	}
 

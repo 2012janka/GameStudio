@@ -3,17 +3,17 @@ package sk.tsystems.gamestudio.game.stones.main;
 import sk.tsystems.gamestudio.game.stones.consoleui.ConsoleUI;
 import sk.tsystems.gamestudio.game.stones.core.Field;
 
-public class Kamene {
+public class Stones {
 
 	private long startTime;
-	private static Kamene instance;
+	private static Stones instance;
 
-	public Kamene() {
+	public Stones() {
 		instance = this;
 
 		ConsoleUI start = new ConsoleUI();
 
-		Field field = new Field(2, 2);
+		Field field = new Field(4, 4);
 
 		startTime = System.currentTimeMillis();
 
@@ -24,7 +24,7 @@ public class Kamene {
 		return (int) (System.currentTimeMillis() - startTime) / 1000;
 	}
 
-	public static Kamene getInstance() {
+	public static Stones getInstance() {
 		return instance;
 	}
 

@@ -50,18 +50,18 @@ public class Field implements Serializable {
 	private void generate() {
 		int i = 1;
 
-		for (int m = 0; m < this.getRowCount(); m++) {
-			for (int n = 0; n < this.getColumnCount(); n++) {
-				tiles[m][n] = new Tile(i);
+		for (int row = 0; row < this.getRowCount(); row++) {
+			for (int column = 0; column < this.getColumnCount(); column++) {
+				tiles[row][column] = new Tile(i);
 				i++;
 
 			}
 		}
 
-		for (int m = 0; m < this.getRowCount(); m++) {
-			for (int n = 0; n < this.getColumnCount(); n++) {
-				shuffleColumns(n);
-				shuffleRows(m);
+		for (int row = 0; row < this.getRowCount(); row++) {
+			for (int column = 0; column < this.getColumnCount(); column++) {
+				shuffleColumns(column);
+				shuffleRows(row);
 			}
 		}
 	}
@@ -87,9 +87,9 @@ public class Field implements Serializable {
 //	}
 
 	private void shuffleColumns(int column) {
-		int dlzka = getRowCount();
-		for (int i = 0; i < dlzka; i++) {
-			int s = i + (int) (Math.random() * (dlzka - i));
+		int size = getRowCount();
+		for (int i = 0; i < size; i++) {
+			int s = i + (int) (Math.random() * (size - i));
 
 			Tile temp = tiles[s][column];
 			tiles[s][column] = tiles[i][column];
@@ -98,9 +98,9 @@ public class Field implements Serializable {
 	}
 
 	private void shuffleRows(int row) {
-		int dlzka = getColumnCount();
-		for (int i = 0; i < dlzka; i++) {
-			int s = (int) (Math.random() * (dlzka - i)) + i;
+		int size = getColumnCount();
+		for (int i = 0; i < size; i++) {
+			int s = (int) (Math.random() * (size - i)) + i;
 
 			Tile temp = tiles[row][s];
 			tiles[row][s] = tiles[row][i];
@@ -110,11 +110,11 @@ public class Field implements Serializable {
 
 	public int[] getEmptyTile() {
 		int[] indexes = new int[2];
-		for (int m = 0; m < this.getRowCount(); m++) {
-			for (int n = 0; n < this.getColumnCount(); n++) {
-				if (tiles[m][n].getValue() == getNumberOfTiles() + 1) {
-					indexes[0] = m;
-					indexes[1] = n;
+		for (int row = 0; row < this.getRowCount(); row++) {
+			for (int column = 0; column < this.getColumnCount(); column++) {
+				if (tiles[row][column].getValue() == getNumberOfTiles() + 1) {
+					indexes[0] = row;
+					indexes[1] = column;
 					return indexes;
 				}
 			}
@@ -141,9 +141,9 @@ public class Field implements Serializable {
 
 	private boolean isSolved() {
 		int i = 1;
-		for (int m = 0; m < this.getRowCount(); m++) {
-			for (int n = 0; n < this.getColumnCount(); n++) {
-				if (tiles[m][n].getValue() != i) {
+		for (int row = 0; row < this.getRowCount(); row++) {
+			for (int column = 0; column < this.getColumnCount(); column++) {
+				if (tiles[row][column].getValue() != i) {
 					return false;
 				}
 				i++;

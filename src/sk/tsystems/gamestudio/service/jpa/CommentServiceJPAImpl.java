@@ -17,7 +17,8 @@ public class CommentServiceJPAImpl implements CommentService {
 
 	@Override
 	public List<Comment> findCommentForGame(String game) {
-		return JpaHelper.getEntityManager().createQuery("SELECT c FROM comment c WHERE c.game=:game").setParameter("game", game).getResultList();
+		return JpaHelper.getEntityManager().createQuery("SELECT c FROM comment c WHERE c.game=:game")
+				.setParameter("game", game).getResultList();
 	}
 
 }

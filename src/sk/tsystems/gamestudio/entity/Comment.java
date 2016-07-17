@@ -1,10 +1,14 @@
 package sk.tsystems.gamestudio.entity;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-
+@Entity
 public class Comment {
-
-	//private int ident;
+	@Id
+	@GeneratedValue
+	private int ident;
 	private String player;
 	private String game;
 	private String comment;

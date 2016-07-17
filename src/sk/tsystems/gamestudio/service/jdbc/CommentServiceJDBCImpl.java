@@ -21,8 +21,6 @@ public class CommentServiceJDBCImpl implements CommentService {
 	private Connection con;
 	private GamePlayerService id = new GamePlayerService();
 
-	// public static final String INSERT_QUERY = "INSERT INTO comments VALUES
-	// (25, ?, ?, ?)";
 	public static final String INSERT_QUERY = "INSERT INTO comments VALUES (indexes.nextval, ?, ?, ?)";
 
 	public static String SELECT_QUERY = "SELECT c.playerComment, p.name FROM COMMENTS c join GAME g on c.GAME_ID = g.GAME_ID join PLAYERS p on p.player_ID=c.player_ID where g.NAME=?";

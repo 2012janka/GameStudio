@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import sk.tsystems.gamestudio.game.stones.core.Field;
 import sk.tsystems.gamestudio.game.stones.core.GameState;
 import sk.tsystems.gamestudio.game.stones.core.Tile;
-import sk.tsystems.gamestudio.game.stones.main.Kamene;
+import sk.tsystems.gamestudio.game.stones.main.Stones;
 
 public class ConsoleUI {
 	private Field field;
@@ -39,7 +39,7 @@ public class ConsoleUI {
 			save();
 
 			if (field.getState() == GameState.NEW) {
-				new Kamene();
+				new Stones();
 			}
 
 			field.setGameState(GameState.PLAYING);
@@ -63,12 +63,12 @@ public class ConsoleUI {
 	public void update() {
 		int numberOfTiles = field.getColumnCount() * field.getRowCount();
 
-		System.out.println("Time: " + Kamene.getInstance().getTime());
+		System.out.println("Time: " + Stones.getInstance().getTime());
 
-		for (int m = 0; m < field.getRowCount(); m++) {
+		for (int row = 0; row < field.getRowCount(); row++) {
 			System.out.println();
-			for (int n = 0; n < field.getColumnCount(); n++) {
-				Tile aktTile = field.getTile(m, n);
+			for (int column = 0; column < field.getColumnCount(); column++) {
+				Tile aktTile = field.getTile(row, column);
 				if (aktTile.getValue() == numberOfTiles) { // System.out.printf("%2d
 															// ",
 															// aktTile.getValue())
@@ -107,7 +107,7 @@ public class ConsoleUI {
 				System.out.println("NEW GAME");
 			} else if (input.equals("exit")) {
 				field.setGameState(GameState.EXIT);
-				System.out.println("Your time: " + Kamene.getInstance().getTime());
+				System.out.println("Your time: " + Stones.getInstance().getTime());
 			} else if (field.borders()[0] && (input.equals("w") || input.equals("up"))) {
 				if (field.borders()[0]) {
 					Tile change = field.getTile(row + 1, column);

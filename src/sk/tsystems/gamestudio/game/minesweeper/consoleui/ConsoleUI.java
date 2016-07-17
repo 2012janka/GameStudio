@@ -1,6 +1,5 @@
 package sk.tsystems.gamestudio.game.minesweeper.consoleui;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,8 +22,7 @@ public class ConsoleUI implements UserInterface {
 	private Field field;
 
 	/** Input reader. */
-	private BufferedReader input = new BufferedReader(new InputStreamReader(
-			System.in));
+	private BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
 	/**
 	 * Reads line of text from the reader.
@@ -42,17 +40,18 @@ public class ConsoleUI implements UserInterface {
 	@Override
 	public void newGameStarted(Field field) {
 		this.field = field;
+		boolean playing = true;
 		do {
 			update();
 			processInput();
 			if (field.getState() == GameState.SOLVED) {
 				System.out.println("You WIN!");
-				System.exit(0);
+				playing = false;
 			} else if (field.getState() == GameState.FAILED) {
 				System.out.println("You LOOSE!");
-				System.exit(0);
+				playing = false;
 			}
-		} while (true);
+		} while (playing);
 	}
 
 	@Override
@@ -64,18 +63,15 @@ public class ConsoleUI implements UserInterface {
 		}
 		System.out.println();
 		System.out.print("____________________");
-		for (int m = 0; m < field.getRowCount(); m++) {
+		for (int row = 0; row < field.getRowCount(); row++) {
 			System.out.println();
-			System.out.printf("%c |", ((char) (m + 'A')));
-			for (int n = 0; n < field.getColumnCount(); n++) {
-				Tile actualTile = field.getTile(m, n);
-				if (actualTile.getState() == Tile.State.OPEN
-						&& actualTile instanceof Mine) {
+			System.out.printf("%c |", ((char) (row + 'A')));
+			for (int column = 0; column < field.getColumnCount(); column++) {
+				Tile actualTile = field.getTile(row, column);
+				if (actualTile.getState() == Tile.State.OPEN && actualTile instanceof Mine) {
 					System.out.print("X ");
-				} else if (actualTile.getState() == Tile.State.OPEN
-						&& actualTile instanceof Clue) {
-					System.out
-							.print(((Clue) actualTile).getValue() + " ");
+				} else if (actualTile.getState() == Tile.State.OPEN && actualTile instanceof Clue) {
+					System.out.print(((Clue) actualTile).getValue() + " ");
 				} else if (actualTile.getState() == Tile.State.MARKED) {
 					System.out.print("M ");
 				} else if (actualTile.getState() == Tile.State.CLOSED) {
@@ -91,8 +87,7 @@ public class ConsoleUI implements UserInterface {
 	 */
 	private void processInput() {
 		System.out.println();
-		System.out
-				.println("Please enter your selection <X> EXIT, <MA1> MARK, <OB4> OPEN : ");
+		System.out.println("Please enter your selection <X> EXIT, <MA1> MARK, <OB4> OPEN : ");
 		try {
 			String value = readLine().toLowerCase();
 			handleInput(value);
@@ -120,8 +115,8 @@ public class ConsoleUI implements UserInterface {
 
 			} else if (option1.equals("o")) {
 				int charAI = option2.charAt(0) - 'a';
-				int vyber3Int = Integer.parseInt(option3String);
-				field.openTile(charAI, vyber3Int);
+				int option3Int = Integer.parseInt(option3String);
+				field.openTile(charAI, option3Int);
 			}
 		} else {
 			throw new WrongFormatException("WRONG INPUT!");
