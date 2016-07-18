@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import sk.tsystems.gamestudio.entity.CommentFromPlayer;
 import sk.tsystems.gamestudio.entity.Score;
 import sk.tsystems.gamestudio.service.ScoreService;
 
@@ -20,7 +21,7 @@ public class ScoreServiceJDBCImpl implements ScoreService {
 	private GamePlayerService id = new GamePlayerService();
 
 	public static final String INSERT_QUERY = "INSERT INTO score VALUES (indexes.nextval, ?, ?, ?)";
-	public static String SELECT_QUERY = "SELECT s.score, p.name FROM SCORE s join GAME g on s.GAME_ID = g.GAME_ID join PLAYERS p on p.player_ID = s.player_ID where g.NAME='Guess The Number' order by s.score DESC";
+	public static String SELECT_QUERY = "SELECT s.score, p.name FROM SCORE s join GAME g on s.GAME_ID = g.GAME_ID join PLAYERS p on p.player_ID = s.player_ID where g.NAME=? order by s.score";
 
 	public ScoreServiceJDBCImpl() {
 		try {
@@ -74,6 +75,7 @@ public class ScoreServiceJDBCImpl implements ScoreService {
 					score.add(new Score(rs.getString(2), game, rs.getInt(1)));
 					i++;
 				}
+				//System.out.println(scoreToString(score));
 				return score;
 			}
 		} catch (Exception e) {
@@ -81,5 +83,17 @@ public class ScoreServiceJDBCImpl implements ScoreService {
 		}
 		return null;
 	}
+//	
+//	public String scoreToString(List<Score> score) {
+//		StringBuilder sb = new StringBuilder();
+//		int i = 0;
+//		for (Score s : score) {
+//			sb.append((i + 1) + ". ");
+//			sb.append(s).toString();
+//			sb.append("\n");
+//			i++;
+//		}
+//		return sb.toString();
+//	}
 
 }

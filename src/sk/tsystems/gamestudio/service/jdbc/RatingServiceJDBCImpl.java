@@ -31,8 +31,22 @@ public class RatingServiceJDBCImpl implements RatingService {
 		}
 	}
 
+	private void checkconn() {
+		try {
+			if (!con.isValid(2))
+				throw new SQLException("aborted");
+		} catch (SQLException e1) {
+			try {
+				con = DriverManager.getConnection(URL, USER, PASSWORD);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
 	@Override
 	public void add(Rating rating) {
+		checkconn();
 
 		try (PreparedStatement stmt = con.prepareStatement(INSERT_QUERY)) {
 			stmt.setInt(1, id.findGameID(rating.getGame()));
@@ -42,33 +56,40 @@ public class RatingServiceJDBCImpl implements RatingService {
 			stmt.executeUpdate();
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println(e.getMessage());
-
 		}
 	}
 
 	@Override
-	public int getAverageRating(String game) {
-		try (PreparedStatement stmt = con.prepareStatement(SELECT_AVERAGE); ResultSet rs = stmt.executeQuery()) {
+	public double getAverageRating(String game) {
+		checkconn();
+
+		try (PreparedStatement stmt = con.prepareStatement(SELECT_AVERAGE)) {
 			stmt.setString(1, game);
-			rs.next();
-			return rs.getInt(1);
+			try (ResultSet rs = stmt.executeQuery()) {
+				rs.next();
+				return rs.getDouble(1);
+			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return 0;
+			e.printStackTrace();
 		}
+		return 0;
 	}
 
 	@Override
 	public int getNumberOfRatings(String game) {
-		try (PreparedStatement stmt = con.prepareStatement(SELECT_COUNT); ResultSet rs = stmt.executeQuery()) {
-			stmt.setString(1, game);
-			rs.next();
-			return rs.getInt(1);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return 0;
-		}
-	}
+		checkconn();
 
+		try (PreparedStatement stmt = con.prepareStatement(SELECT_COUNT)) {
+			stmt.setString(1, game);
+			try (ResultSet rs = stmt.executeQuery()) {
+				rs.next(); 
+				return rs.getInt(1);				
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }

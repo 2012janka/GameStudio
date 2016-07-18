@@ -43,5 +43,15 @@ public class Score {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+
+		sb.append("score ");
+		sb.append(this.getScore());
+		sb.append(" from player ");
+		sb.append(this.getPlayer());
+		return sb.toString();
+	}
 
 }

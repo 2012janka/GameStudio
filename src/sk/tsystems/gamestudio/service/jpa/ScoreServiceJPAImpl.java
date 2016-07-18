@@ -18,7 +18,7 @@ public class ScoreServiceJPAImpl implements ScoreService{
 
 	@Override
 	public List<Score> findTopScoreForGame(String game) {
-		return JpaHelper.getEntityManager().createQuery("SELECT s FROM score s WHERE s.game=:game").setParameter("game", game).setMaxResults(10).getResultList();
+		return JpaHelper.getEntityManager().createQuery("SELECT s FROM Score s WHERE s.game=:game").setParameter("game", game).setMaxResults(10).getResultList();
 	}
 
 }

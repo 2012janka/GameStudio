@@ -12,10 +12,12 @@ import java.io.ObjectOutputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sk.tsystems.gamestudio.entity.Score;
 import sk.tsystems.gamestudio.game.stones.core.Field;
 import sk.tsystems.gamestudio.game.stones.core.GameState;
 import sk.tsystems.gamestudio.game.stones.core.Tile;
 import sk.tsystems.gamestudio.game.stones.main.Stones;
+import sk.tsystems.gamestudio.service.ScoreService;
 
 public class ConsoleUI {
 	private Field field;
@@ -41,17 +43,18 @@ public class ConsoleUI {
 			if (field.getState() == GameState.NEW) {
 				new Stones();
 			}
-
-			field.setGameState(GameState.PLAYING);
-
+			
 			if (field.getState() == GameState.EXIT) {
 				//update();
 				System.out.println("BYE");
 				playing = false;
 			}
 			
+			field.setGameState(GameState.PLAYING);
+			
 			if (field.getState() == GameState.SOLVED) {
 				update();
+				Stones.getInstance().addScoreToDatabase();
 				System.out.println("You WIN!");
 				playing = false;
 			}
@@ -147,6 +150,7 @@ public class ConsoleUI {
 		tile1.setValue(tile2.getValue());
 		tile2.setValue(tmp);
 	}
+	
 
 	public void save() {
 		try {

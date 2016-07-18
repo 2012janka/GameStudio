@@ -5,18 +5,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Comment {
+public class CommentFromPlayer {
 	@Id
 	@GeneratedValue
 	private int ident;
 	private String player;
 	private String game;
-	private String comment;
+	private String playercomment;
 
-	public Comment(String player, String game, String comment) {
+	public CommentFromPlayer(String player, String game, String comment) {
 		this.player = player;
 		this.game = game;
-		this.comment = comment;
+		this.playercomment = comment;
+	}
+
+	public CommentFromPlayer() {
+		this(null, null, null);
 	}
 
 	public String getPlayer() {
@@ -36,11 +40,11 @@ public class Comment {
 	}
 
 	public String getComment() {
-		return comment;
+		return playercomment;
 	}
 
 	public void setComment(String comment) {
-		this.comment = comment;
+		this.playercomment = comment;
 	}
 
 	public String toString() {

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import sk.tsystems.gamestudio.entity.Comment;
+import sk.tsystems.gamestudio.entity.CommentFromPlayer;
 
 import sk.tsystems.gamestudio.service.CommentService;
 
@@ -48,7 +48,7 @@ public class CommentServiceJDBCImpl implements CommentService {
 	}
 
 	@Override
-	public void add(Comment comment) {
+	public void add(CommentFromPlayer comment) {
 		checkconn();
 
 		try (PreparedStatement stmt = con.prepareStatement(INSERT_QUERY)) {
@@ -65,15 +65,15 @@ public class CommentServiceJDBCImpl implements CommentService {
 	}
 
 	@Override
-	public List<Comment> findCommentForGame(String game) {
+	public List<CommentFromPlayer> findCommentForGame(String game) {
 		checkconn();
 
 		try (PreparedStatement stmt = con.prepareStatement(SELECT_QUERY)) {
 			stmt.setString(1, game);
 			try (ResultSet rs = stmt.executeQuery()) {
-				List<Comment> comments = new ArrayList<>();
+				List<CommentFromPlayer> comments = new ArrayList<>();
 				while (rs.next()) {
-					comments.add(new Comment(rs.getString(2), game, rs.getString(1)));
+					comments.add(new CommentFromPlayer(rs.getString(2), game, rs.getString(1)));
 				}
 				System.out.println(commentsToString(comments));
 				return comments;
@@ -84,10 +84,10 @@ public class CommentServiceJDBCImpl implements CommentService {
 		return null;
 	}
 
-	public String commentsToString(List<Comment> comments) {
+	public String commentsToString(List<CommentFromPlayer> comments) {
 		StringBuilder sb = new StringBuilder();
 		int i = 0;
-		for (Comment c : comments) {
+		for (CommentFromPlayer c : comments) {
 			sb.append((i + 1) + ". ");
 			sb.append(c).toString();
 			sb.append("\n");

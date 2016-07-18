@@ -3,10 +3,22 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ConsoleUI {
-	Number number;
+import sk.tsystems.gamestudio.entity.Score;
+import sk.tsystems.gamestudio.service.ScoreService;
+import sk.tsystems.gamestudio.service.jdbc.ScoreServiceJDBCImpl;
+import sk.tsystems.gamestudio.service.jpa.ScoreServiceJPAImpl;
 
+public class ConsoleUI {
+	private ScoreService score;
+	private Number number;
+	private int numberOfGuesses;
+
+	public int getNumberOfGuesses() {
+		return numberOfGuesses;
+	}
+	
 	public ConsoleUI(Number number) {
+		score = new ScoreServiceJPAImpl();
 		this.number = number;
 	}
 
@@ -23,12 +35,12 @@ public class ConsoleUI {
 	public void newGameStarted() {
 		System.out.println("Hello! Guess the number from 1 to 1000!");
 		boolean playing = true;
-		int numberOfGuesses = 0;
 		do {
-			numberOfGuesses++;
+			this.numberOfGuesses++;
 			number.guessNumber(processInput());
 			if (number.isWin()) {
-				System.out.println("You win! You guessed the number after " + numberOfGuesses + " attempts!");
+				System.out.println("You win! You guessed the number after " + this.numberOfGuesses + " attempts!");
+				addScoreToDatabase();
 				playing = false;
 			}
 		} while (playing);
@@ -43,5 +55,10 @@ public class ConsoleUI {
 		} else {
 			return value;
 		}
+	}
+	
+	private void addScoreToDatabase(){
+		Score newScore=new Score("Jano", "GUESS_THE_NUMBER", getNumberOfGuesses());
+		score.add(newScore);		
 	}
 }
