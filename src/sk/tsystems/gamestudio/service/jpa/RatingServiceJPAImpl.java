@@ -39,4 +39,8 @@ public class RatingServiceJPAImpl implements RatingService {
 //				.setParameter("game", game).getSingleResult();
 	}
 
+	@Override
+	public void deleteOldRating(Rating rating) {
+		JpaHelper.getEntityManager().remove(r.rating=:rating);			
+	}
 }

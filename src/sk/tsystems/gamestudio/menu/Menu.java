@@ -24,7 +24,7 @@ import sk.tsystems.gamestudio.service.jpa.ScoreServiceJPAImpl;
 public class Menu {
 	// private String gameName;
 	// private String playerName = System.getProperty("user.home");
-	// private String playerName = "Jano";
+	private String playerName = "Stano";
 	private CommentService comments;
 	private RatingService rating;
 	private ScoreService score;
@@ -72,7 +72,7 @@ public class Menu {
 				break;
 			default:
 				System.out.println("Wrong input!");
-			}			
+			}
 		}
 	}
 
@@ -84,9 +84,9 @@ public class Menu {
 		switch (option) {
 		case "y":
 			System.out.println("Write your comment: ");
-			String playerComment = readLine();
-			//System.out.println(playerComment);
-			CommentFromPlayer comment = new CommentFromPlayer("Jano", game, playerComment);
+			String playerComment = readLine().trim();					//ked dam iba enter nema mi pridat komentar
+			// System.out.println(playerComment);
+			CommentFromPlayer comment = new CommentFromPlayer(playerName, game, playerComment);
 			return comment;
 
 		case "n":
@@ -101,29 +101,28 @@ public class Menu {
 	private Rating newRating(String game) {
 		boolean rate = true;
 
-		while (rate) {
-			System.out.println("\nDo you want to rate this game? y/yes, n/no ");
-			String option = readLine();
+		System.out.println("\nDo you want to rate this game? y/yes, n/no ");
+		String option = readLine();
 
-			switch (option) {
-			case "y":
+		switch (option) {
+		case "y":
+			while (rate) {
 				System.out.println("Choose rating from 1 to 5: ");
 				int playerRating = Integer.parseInt(readLine());
 				if (playerRating <= 5 && playerRating >= 1) {
 					// System.out.println(playerRating);
 					rate = false;
-					Rating rating = new Rating("Jano", game, playerRating);
+					Rating rating = new Rating(playerName, game, playerRating);
 					return rating;
 				} else {
 					System.out.println("You can rate only from 1 to 5!");
 				}
-			case "n":
-				rate = false;
-				break;
-
-			default:
-				System.out.println("Wrong input!");
 			}
+		case "n":
+			break;
+
+		default:
+			System.out.println("Wrong input!");
 		}
 		return null;
 	}
@@ -175,9 +174,10 @@ public class Menu {
 
 		Rating rate = newRating(game);
 		if (rate != null) {
+			rating.deleteOldRating(rate);
 			rating.add(rate);
 		}
-		
+
 		System.out.println("TOP SCORES: " + score.findTopScoreForGame(game).toString());
 	}
 }

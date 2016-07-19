@@ -8,4 +8,6 @@ public interface RatingService {
 	double getAverageRating(String game);
 	
 	int getNumberOfRatings(String game);
+	
+	public void deleteOldRating(Rating rating);
 }

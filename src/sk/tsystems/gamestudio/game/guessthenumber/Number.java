@@ -1,4 +1,5 @@
 package sk.tsystems.gamestudio.game.guessthenumber;
+
 import java.util.Random;
 
 public class Number {
@@ -7,7 +8,7 @@ public class Number {
 
 	public Number() {
 		Random random = new Random();
-		this.number = random.nextInt(10);
+		this.number = random.nextInt(10) + 1;
 		this.win = false;
 	}
 

@@ -4,20 +4,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+
+//@NamedQuery(name="selectAll", "Select s from Score s")...potom v kode List<?> l = em.createQuery("selectAll").getResultList()
 @Entity
 public class Score {
 
-	@Id
-	@GeneratedValue
+	@Id		//primary key
+	@GeneratedValue			//chcem aby mi jpa samo priradzovalo id
+	//@transient .. ked nieco nechcem dat do databazy
 	private int ident;
 	private String player;
 	private String game;
 	private int score;
+	
+//	@ManyToOne
+//	private Player player;
 
 	public Score(String player, String game, int score) {
 		this.player = player;
 		this.game = game;
 		this.score = score;
+	}
+
+	public Score() {
+		this(null, null, 0);
 	}
 
 	public String getPlayer() {
@@ -43,7 +53,7 @@ public class Score {
 	public void setScore(int score) {
 		this.score = score;
 	}
-	
+
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 

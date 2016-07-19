@@ -17,10 +17,12 @@ public class RatingServiceJDBCImpl implements RatingService {
 	private Connection con;
 	private GamePlayerService id = new GamePlayerService();
 
-	public static final String INSERT_QUERY = "INSERT INTO rating VALUES (indexes.nextval, ?, ?, ?)";
+	private static final String INSERT_QUERY = "INSERT INTO rating VALUES (?, ?, ?)";
+	private static final String GET_IDS = "SELECT GAME_ID, PLAYER_ID from RATING";
+	private static final String DELETE_RATING = "DELETE FROM RATING where GAME_ID=? AND PLAYER_ID=?";
 
-	public static String SELECT_COUNT = "SELECT count(*) FROM RATING r join GAME g on r.GAME_ID = g.GAME_ID where g.NAME=?";
-	public static String SELECT_AVERAGE = "SELECT AVG(r.rating) FROM RATING r join GAME g on r.GAME_ID = g.GAME_ID where g.NAME=?";
+	private static final String SELECT_COUNT = "SELECT count(*) FROM RATING r join GAME g on r.GAME_ID = g.GAME_ID where g.NAME=?";
+	private static final String SELECT_AVERAGE = "SELECT AVG(r.rating) FROM RATING r join GAME g on r.GAME_ID = g.GAME_ID where g.NAME=?";
 
 	public RatingServiceJDBCImpl() {
 		try {
@@ -55,10 +57,39 @@ public class RatingServiceJDBCImpl implements RatingService {
 
 			stmt.executeUpdate();
 
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public void deleteOldRating(Rating rating) {
+		if (!isUnique(rating)) {
+			try (PreparedStatement stmt = con.prepareStatement(DELETE_RATING)) {
+				stmt.setInt(1, id.findGameID(rating.getGame()));
+				stmt.setInt(2, id.findPlayerID(rating.getPlayer()));
+				stmt.executeUpdate();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private boolean isUnique(Rating rating) {
+		try (PreparedStatement stmt = con.prepareStatement(GET_IDS)) {
+
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				if (rs.getInt(1) == id.findGameID(rating.getGame())
+						&& rs.getInt(2) == id.findPlayerID(rating.getPlayer())) {
+					return false;
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 	@Override
@@ -71,7 +102,7 @@ public class RatingServiceJDBCImpl implements RatingService {
 				rs.next();
 				return rs.getDouble(1);
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
@@ -84,10 +115,10 @@ public class RatingServiceJDBCImpl implements RatingService {
 		try (PreparedStatement stmt = con.prepareStatement(SELECT_COUNT)) {
 			stmt.setString(1, game);
 			try (ResultSet rs = stmt.executeQuery()) {
-				rs.next(); 
-				return rs.getInt(1);				
+				rs.next();
+				return rs.getInt(1);
 			}
-		} catch (Exception e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return 0;
